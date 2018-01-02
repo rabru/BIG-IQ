@@ -6,9 +6,10 @@
 # (tmos) # modify auth user admin password admin shell bash
 #
 # UDF specific: Disabeling hostname update over UDF
-# (tmos) # modify sys global-settings hostname bigip.local
-# (tmos) # modify sys management-dhcp sys-mgmt-dhcp-config request-options delete { host-name }
+# (tmos) # modify sys management-dhcp sys-mgmt-dhcp-config request-options delete { domain-name domain-name-servers ntp-servers host-name }
+# (tmos) # modify sys global-settings hostname bigip1
 # (tmos) # save sys config partitions all
+# > full_box_reboot
 #
 # Authorize admin on host to access peer without password (Please replace <<peer_mgmt_ip>>):
 # > ssh-copy-id -i /root/.ssh/identity.pub admin@<<peer_mgmt_ip>>
@@ -26,7 +27,7 @@ HOSTNAME_b="stilzchen.f5demo.com"
 DEVICE_GROUP_NAME="bigip_cluster"
 # DNS
 DNS_SERVER="9.9.9.9 8.8.8.8"
-DNS_SEARCH="localdomain f5demo.com"
+DNS_SEARCH="localhost f5demo.com"
 # NTP
 NTP_SERVER="0.de.pool.ntp.org 1.de.pool.ntp.org"
 NTP_TIMEZONE="Europe/Berlin"
@@ -70,9 +71,9 @@ ssh admin@$PEER_MGMT_IP tmsh create /net vlan external interfaces add { $EXT_VLA
 ssh admin@$PEER_MGMT_IP tmsh create /net self ext_self address $EXT_SELF_IP_b/$EXT_SELF_IP_MASK vlan external
 
 tmsh create /net vlan ha interfaces add { $HA_VLAN_INTERFACE { untagged } }  tag 10
-tmsh create /net self ha_self address $HA_SELF_IP_a/$HA_SELF_IP_MASK vlan ha
+tmsh create /net self ha_self address $HA_SELF_IP_a/$HA_SELF_IP_MASK vlan ha allow-service default
 ssh admin@$PEER_MGMT_IP tmsh create /net vlan ha interfaces add { $HA_VLAN_INTERFACE { untagged } }  tag 10
-ssh admin@$PEER_MGMT_IP tmsh create /net self ha_self address $HA_SELF_IP_b/$HA_SELF_IP_MASK vlan ha
+ssh admin@$PEER_MGMT_IP tmsh create /net self ha_self address $HA_SELF_IP_b/$HA_SELF_IP_MASK vlan ha allow-service default
 
 ######################
 # HA Setup
@@ -93,19 +94,39 @@ ssh admin@$PEER_MGMT_IP tmsh modify cm device $HOSTNAME_b mirror-ip $EXT_SELF_IP
 tmsh modify cm trust-domain Root ca-devices add { $PEER_MGMT_IP } name $HOSTNAME_b username admin password $ADMIN_PASSWD
 # Create Device Group
 tmsh create cm device-group $DEVICE_GROUP_NAME  devices add { $HOSTNAME_a $HOSTNAME_b } type sync-failover network-failover enabled
+# Wait until ready to sync
+echo "Wait until ready to sync:"
+for i in {0..60..2}
+do
+  value=$( tmsh show cm sync-status | grep Color | grep -ic blue )
+  echo "Wait $i seconds"
+  if [ $value -eq 1 ]
+  then
+    echo " - Ready for Sync - "
+    break
+  else
+    if [ $i -eq 60 ]
+    then
+      echo " - Not ready to sync - Exit - "
+      exit
+    fi
+    sleep 2
+  fi
+done
 # Initial Sync
 tmsh run cm config-sync force-full-load-push to-group $DEVICE_GROUP_NAME
-# wait until sync is finished
-for i in {0..120..2}
+# Wait until sync is finished
+echo "Wait until sync is finished:"
+for i in {0..60..2}
 do
   value=$( tmsh show cm sync-status | grep Color | grep -ic green )
+  echo "Wait $i seconds"
   if [ $value -eq 1 ]
   then
     echo " - Sync is done - "
     break
   else
-    echo "Wait $i seconds"
-    if [ $i -eq 120 ]
+    if [ $i -eq 60 ]
     then
       echo " - Sync Failed - "
     fi
