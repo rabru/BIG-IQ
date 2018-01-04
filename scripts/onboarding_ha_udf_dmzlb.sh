@@ -22,9 +22,9 @@ PEER_MGMT_IP="10.1.1.14"
 ADMIN_PASSWD="admin"
 
 # System
-HOSTNAME_a="bigipa.f5demo.com"
-HOSTNAME_b="bigipb.f5demo.com"
-DEVICE_GROUP_NAME="bigip_cluster"
+HOSTNAME_a="dmzlb1.f5demo.com"
+HOSTNAME_b="dmzlb2.f5demo.com"
+DEVICE_GROUP_NAME="dmzlb_cluster"
 # DNS
 DNS_SERVER="9.9.9.9 8.8.8.8"
 DNS_SEARCH="localhost f5demo.com"
