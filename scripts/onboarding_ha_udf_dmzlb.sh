@@ -54,10 +54,10 @@ ssh admin@$PEER_MGMT_IP tmsh modify /sys global-settings hostname $HOSTNAME_b
 
 tmsh modify /sys db ui.system.preferences.recordsperscreen value 100
 ssh admin@$PEER_MGMT_IP tmsh modify /sys db ui.system.preferences.recordsperscreen value 100
-modify sys httpd auth-pam-idle-timeout $IDLE_TIMEOUT
-ssh admin@$PEER_MGMT_IP modify sys httpd auth-pam-idle-timeout $IDLE_TIMEOUT
-modify /sys db ui.system.preferences.startscreen value network_map
-ssh admin@$PEER_MGMT_IP modify /sys db ui.system.preferences.startscreen value network_map
+tmsh modify sys httpd auth-pam-idle-timeout $IDLE_TIMEOUT
+ssh admin@$PEER_MGMT_IP tmsh modify sys httpd auth-pam-idle-timeout $IDLE_TIMEOUT
+tmsh modify /sys db ui.system.preferences.startscreen value network_map
+ssh admin@$PEER_MGMT_IP tmsh modify /sys db ui.system.preferences.startscreen value network_map
 
 tmsh modify /sys global-settings gui-setup disabled
 ssh admin@$PEER_MGMT_IP tmsh modify /sys global-settings gui-setup disabled
