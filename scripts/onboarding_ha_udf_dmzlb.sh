@@ -16,8 +16,8 @@
 
 
 ######## VARS ##########################
-HOST_MGMT_IP="10.1.1.13"
-PEER_MGMT_IP="10.1.1.14"
+HOST_MGMT_IP="10.1.1.14"
+PEER_MGMT_IP="10.1.1.15"
 
 ADMIN_PASSWD="admin"
 
