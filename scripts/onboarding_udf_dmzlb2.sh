@@ -10,10 +10,6 @@
 # (tmos) # modify sys global-settings hostname bigip1
 # (tmos) # save sys config partitions all
 # > full_box_reboot
-#
-# Authorize admin on host to access peer without password (Please replace <<peer_mgmt_ip>>):
-# > ssh-copy-id -i /root/.ssh/identity.pub admin@<<peer_mgmt_ip>>
-
 
 ######## VARS ##########################
 MGMT_IP="10.1.1.15"
