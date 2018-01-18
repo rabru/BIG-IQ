@@ -69,3 +69,6 @@ tmsh modify cm device $HOSTNAME configsync-ip $EXT_SELF_IP
 tmsh modify /cm device $HOSTNAME unicast-address { { ip $HA_SELF_IP } { ip $MGMT_IP } }
 # set mirroring ip
 tmsh modify cm device $HOSTNAME mirror-ip $EXT_SELF_IP
+
+# save changes
+tmsh save /sys config

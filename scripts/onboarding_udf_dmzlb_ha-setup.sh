@@ -80,8 +80,6 @@ done
 
 # Show Sync status
 tmsh show cm sync-status
-ssh admin@$PEER_MGMT_IP tmsh show cm sync-status
 
 # save changes
 tmsh save /sys config
-ssh admin@$PEER_MGMT_IP tmsh save /sys config
