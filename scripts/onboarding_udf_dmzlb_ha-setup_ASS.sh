@@ -1,5 +1,3 @@
-# HA Setup for an active/standby deployment
-#
 ######## Manual Tasks on the host ######
 # Please execute the following two lines on the host BIG-IP,
 # on which you plan to start this script from the BIG-IQ
@@ -14,13 +12,15 @@
 # > full_box_reboot
 
 ######## VARS ##########################
-PEER_MGMT_IP="10.1.1.15"
+PEER1_MGMT_IP="10.1.1.15"
+PEER2_MGMT_IP="10.1.1.16"
 
 ADMIN_PASSWD="admin"
 
 # System
 HOSTNAME="dmzlb1.f5demo.com"
-HOSTNAME_PEER="dmzlb2.f5demo.com"
+HOSTNAME_PEER1="dmzlb2.f5demo.com"
+HOSTNAME_PEER2="dmzlb3.f5demo.com"
 DEVICE_GROUP_NAME="dmzlb_cluster"
 # DNS
 
@@ -37,9 +37,10 @@ tmsh create /net self ext_floating_self address $EXT_SELF_IP/$EXT_SELF_IP_MASK v
 # HA Setup
 
 # setup trust
-tmsh modify cm trust-domain Root ca-devices add { $PEER_MGMT_IP } name $HOSTNAME_PEER username admin password $ADMIN_PASSWD
+tmsh modify cm trust-domain Root ca-devices add { $PEER1_MGMT_IP } name $HOSTNAME_PEER1 username admin password $ADMIN_PASSWD
+tmsh modify cm trust-domain Root ca-devices add { $PEER2_MGMT_IP } name $HOSTNAME_PEER2 username admin password $ADMIN_PASSWD
 # Create Device Group
-tmsh create cm device-group $DEVICE_GROUP_NAME  devices add { $HOSTNAME $HOSTNAME_PEER } type sync-failover network-failover enabled
+tmsh create cm device-group $DEVICE_GROUP_NAME  devices add { $HOSTNAME $HOSTNAME_PEER1 $HOSTNAME_PEER2 } type sync-failover network-failover enabled
 # Wait until ready to sync
 echo "Wait until ready to sync:"
 for i in {0..60..2}
