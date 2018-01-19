@@ -1,3 +1,5 @@
+# HA Setup for an active/standby/standby deployment
+#
 ######## Manual Tasks on the host ######
 # Please execute the following two lines on the host BIG-IP,
 # on which you plan to start this script from the BIG-IQ
