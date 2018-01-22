@@ -9,6 +9,7 @@
 # (tmos) # modify sys management-dhcp sys-mgmt-dhcp-config request-options delete { domain-name domain-name-servers ntp-servers host-name }
 # (tmos) # modify sys global-settings hostname bigip1
 # (tmos) # save sys config partitions all
+# (tmos) # bash
 # > full_box_reboot
 #
 # Authorize admin on host to access peer without password (Please replace <<peer_mgmt_ip>>):

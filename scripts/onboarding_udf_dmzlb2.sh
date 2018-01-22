@@ -9,6 +9,7 @@
 # (tmos) # modify sys management-dhcp sys-mgmt-dhcp-config request-options delete { domain-name domain-name-servers ntp-servers host-name }
 # (tmos) # modify sys global-settings hostname bigip1
 # (tmos) # save sys config partitions all
+# (tmos) # bash
 # > full_box_reboot
 
 ######## VARS ##########################
@@ -16,15 +17,6 @@ MGMT_IP="10.1.1.15"
 
 # System
 HOSTNAME="dmzlb2.f5demo.com"
-
-# DNS
-DNS_SERVER="9.9.9.9 8.8.8.8"
-DNS_SEARCH="localhost f5demo.com"
-# NTP
-NTP_SERVER="0.de.pool.ntp.org 1.de.pool.ntp.org"
-NTP_TIMEZONE="Europe/Berlin"
-# GUI
-IDLE_TIMEOUT="9000"
 
 # Network
 EXT_VLAN_INTERFACE="1.1"
@@ -34,6 +26,17 @@ EXT_SELF_IP="10.1.10.22"
 HA_VLAN_INTERFACE="1.2"
 HA_SELF_IP_MASK="24"
 HA_SELF_IP="10.1.20.22"
+
+# static ##############################
+
+# DNS
+DNS_SERVER="9.9.9.9 8.8.8.8"
+DNS_SEARCH="localhost f5demo.com"
+# NTP
+NTP_SERVER="0.de.pool.ntp.org 1.de.pool.ntp.org"
+NTP_TIMEZONE="Europe/Berlin"
+# GUI
+IDLE_TIMEOUT="9000"
 
 #######################################
 
